@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/express-5.x-blue)](https://expressjs.com/)
-[![在线体验](https://img.shields.io/badge/在线体验-api.muysky.cn-blue)](https://api.muysky.cn/api/proxy/conan_quotes/api/quotes/random)
+[![在线体验](https://img.shields.io/badge/在线体验-api.muysky.cn-blue)](https://api.muysky.cn/api/proxy/conan_quotes)
 [![主站](https://img.shields.io/badge/主站-api.muysky.cn-green)](https://api.muysky.cn)
 
 一个简洁优雅的**名侦探柯南**经典名言 RESTful API，支持多语言查询、数据统计与管理后台。
