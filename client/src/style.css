@@ -1,0 +1,31 @@
+/* Global styles */
+:root {
+  --accent: #e99312;
+  --accent-dark: #c77a0a;
+  --bg-dark: #0f1117;
+  --bg-card: #181b23;
+  --text: #e0e0e0;
+  --text-muted: #8892a0;
+  --border: #252a35;
+}
+
+/* Element Plus dark theme overrides */
+.el-table {
+  --el-table-bg-color: transparent;
+  --el-table-header-bg-color: #1a1f28;
+  --el-table-row-hover-bg-color: #1e2430;
+  --el-table-border-color: var(--border);
+}
+
+.el-card {
+  --el-card-bg-color: var(--bg-card);
+  --el-card-border-color: var(--border);
+}
+
+.el-input__wrapper {
+  background: #1a1f28 !important;
+}
+
+.el-dialog {
+  background: var(--bg-card) !important;
+}
