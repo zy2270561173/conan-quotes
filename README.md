@@ -68,13 +68,16 @@ npm start
 | `s` | 名言内容搜索 | `?s=真相` |
 | `n` | 返回数量 | `?n=10` |
 | `la` | 语言：`c`(中文) / `j`(日文) | `?la=j` |
-| `type` | 返回格式：`json` / `text` / `html` / `js` | `?type=html` |
+| `type` | 返回格式：`html`(默认) / `json` / `text` / `js` | `?type=json` |
 
 ### 使用示例
 
 ```bash
-# 随机获取一条名言
+# 随机获取一条名言（默认返回 HTML 页面）
 curl http://localhost:3000/api/quotes/random
+
+# 获取 JSON 格式（需添加 type=json）
+curl http://localhost:3000/api/quotes/random?type=json
 
 # 获取柯南的名言
 curl "http://localhost:3000/api/quotes?qu=柯南"
@@ -84,9 +87,6 @@ curl "http://localhost:3000/api/quotes/random?qu=柯南&la=j&type=text"
 
 # 批量获取5条名言
 curl http://localhost:3000/api/quotes/random?n=5
-
-# 获取 HTML 页面展示
-curl "http://localhost:3000/api/quotes/random?type=html"
 ```
 
 ### 响应示例

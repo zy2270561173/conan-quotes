@@ -38,8 +38,12 @@ function formatQuotes(quotesList, la) {
   });
 }
 
-function sendResponse(res, data, type) {
+function sendResponse(res, data, type, req) {
   const signature = { api: 'MuYunApi', project: '名柯南名言集', version: '1.0' };
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const currentPath = req.originalUrl.split('?')[0];
+  const jsonUrl = `${baseUrl}${currentPath}${currentPath.includes('?') ? '&' : '?'}type=json`;
+
   switch (type) {
     case 'text':
       let text = '';
@@ -57,6 +61,10 @@ function sendResponse(res, data, type) {
       text += `Powered by ${signature.api} · ${signature.project} v${signature.version}`;
       res.set('Content-Type', 'text/plain; charset=utf-8');
       res.send(text);
+      break;
+
+    case 'json':
+      res.json({ ...data, _signature: signature });
       break;
 
     case 'html':
@@ -97,6 +105,9 @@ body{background:radial-gradient(ellipse at top,rgba(233,147,18,0.08) 0%,transpar
 .page-header .badge{display:inline-block;margin-top:12px;padding:4px 14px;background:rgba(233,147,18,0.12);color:var(--accent);border-radius:20px;font-size:0.78rem;font-weight:500;border:1px solid rgba(233,147,18,0.2)}
 .page-header .signature{margin-top:14px;display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(233,147,18,0.08);border:1px solid rgba(233,147,18,0.2);border-radius:20px;font-size:0.75rem;color:var(--accent)}
 .page-header .signature i{font-size:0.75rem;display:inline;margin:0}
+.page-header .json-link{margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;font-size:0.72rem;color:#888;transition:all .2s}
+.page-header .json-link:hover{background:rgba(255,255,255,0.1);color:#fff}
+.page-header .json-link i{font-size:0.65rem}
 .quote-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;margin-bottom:20px;overflow:hidden;transition:transform .2s,box-shadow .2s;position:relative}
 .quote-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.3);border-color:rgba(233,147,18,0.2)}
 .quote-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--accent),var(--accent-dark));border-radius:16px 0 0 16px}
@@ -124,6 +135,7 @@ body{background:radial-gradient(ellipse at top,rgba(233,147,18,0.08) 0%,transpar
     <h1>名侦探柯南名言</h1>
     <p>真相只有一个</p>
     ${Array.isArray(data.quotes) && data.count > 1 ? `<span class="badge">共 ${data.count} 条名言</span>` : ''}
+    <a class="json-link" href="${jsonUrl}" target="_blank"><i class="fas fa-code"></i> 查看 JSON 格式</a>
     <div class="signature"><i class="fas fa-medal"></i>MuYunApi · 名柯南名言集 v${signature.version}</div>
   </div>
   ${Array.isArray(data.quotes)
@@ -149,7 +161,8 @@ body{background:radial-gradient(ellipse at top,rgba(233,147,18,0.08) 0%,transpar
       break;
 
     default:
-      res.json({ ...data, _signature: signature });
+      // 默认返回 HTML
+      sendResponse(res, data, 'html', req);
   }
 }
 
@@ -171,7 +184,7 @@ app.get('/api', (req, res) => {
       qu: '角色名: 支持中日文模糊搜索',
       s: '搜索关键词: 名言内容模糊搜索',
       n: '返回数量: 默认全部(all)/1(random)，最大50（all）/20（random）',
-      type: '返回类型: json(默认) / text / html / js'
+      type: '返回类型: html(默认) / json / text / js'
     },
     admin: '/admin - 后台管理（Vue SPA）'
   });
@@ -204,7 +217,7 @@ app.get('/api/quotes', (req, res) => {
     }
     recordQuery('all', req.query.qu, rows.length);
     let formatted = formatQuotes(rows, req.query.la);
-    sendResponse(res, { count: formatted.length, quotes: formatted }, req.query.type);
+    sendResponse(res, { count: formatted.length, quotes: formatted }, req.query.type || 'html', req);
   });
 });
 
@@ -233,7 +246,7 @@ app.get('/api/quotes/random', (req, res) => {
       if (!row) { res.status(404).json({ error: '未找到符合条件的名言' }); return; }
       recordQuery('random', req.query.qu, 1);
       let formatted = formatQuotes([row], req.query.la);
-      sendResponse(res, formatted[0], req.query.type);
+      sendResponse(res, formatted[0], req.query.type || 'html', req);
     });
   } else {
     db.all(sql, params, (err, rows) => {
@@ -241,7 +254,7 @@ app.get('/api/quotes/random', (req, res) => {
       if (!rows || rows.length === 0) { res.status(404).json({ error: '未找到符合条件的名言' }); return; }
       recordQuery('random', req.query.qu, rows.length);
       let formatted = formatQuotes(rows, req.query.la);
-      sendResponse(res, { count: formatted.length, quotes: formatted }, req.query.type);
+      sendResponse(res, { count: formatted.length, quotes: formatted }, req.query.type || 'html', req);
     });
   }
 });
@@ -258,7 +271,7 @@ app.get('/api/quotes/:id', (req, res) => {
     }
     recordQuery('byId', row.character, 1);
     let formatted = formatQuotes([row], req.query.la);
-    sendResponse(res, formatted[0], req.query.type);
+    sendResponse(res, formatted[0], req.query.type || 'html', req);
   });
 });
 
