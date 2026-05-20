@@ -12,7 +12,7 @@
 
 ## 🌐 在线体验
 
-- **API 体验地址**：https://api.muysky.cn/api/proxy/conan_quotes/api/quotes/random
+- **API 体验地址**：https://api.muysky.cn/api/proxy/conan_quotes
 - **主站**：https://api.muysky.cn
 
 ## ✨ 功能特性
