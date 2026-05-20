@@ -98,11 +98,41 @@ curl "http://localhost:3000/api/quotes/random?type=html"
 
 ## 🖥️ 管理后台
 
-### Web 后台
+### 1. 启动后端服务
 
-访问 `/admin` 使用管理员账号登录。
+```bash
+# 在项目根目录
+npm install
+npm start
+```
+
+服务运行在 http://localhost:3000
+
+### 2. 启动前端开发服务器
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+前端运行在 http://localhost:5173，自动代理 API 请求到后端。
+
+### 3. 访问后台
+
+- 前端地址：http://localhost:5173/admin
+- 后端 API：http://localhost:3000/api
+
+### 4. 管理员登录
 
 **默认账号：** `A8101123` / `A8101123`
+
+### 5. 生产环境部署
+
+前端构建后，可直接通过后端服务访问：
+```
+/admin -> Web 管理后台
+```
 
 ### Electron 桌面应用
 
