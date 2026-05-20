@@ -1,18 +1,27 @@
-# 名侦探柯南名言 API
+# 🍡 Conan Quotes - 名侦探柯南名言 API
 
-🍡 名侦探柯南经典名言 RESTful API，支持多语言查询、数据统计与管理后台。
+> 真相只有一个 —— 致每一个热爱柯南的你
 
-[English](README_en.md) | 简体中文
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/express-5.x-blue)](https://expressjs.com/)
 
-## 功能特性
+一个简洁优雅的**名侦探柯南**经典名言 RESTful API，支持多语言查询、数据统计与管理后台。
 
-- 🌐 **RESTful API** - 提供 JSON/Text/HTML/JS 多格式返回
-- 🔍 **智能搜索** - 支持角色名、中日文名言模糊搜索
-- 📊 **数据统计** - 查询次数、热门角色、每日趋势
-- 🔐 **管理后台** - Electron 桌面应用，批量导入/导出
-- 📦 **跨平台** - 支持 Windows/macOS/Linux
+[🌐 在线体验](http://api.muysky.cn/api/quotes/random) | [📺 管理后台](http://api.muysky.cn/admin)
 
-## 快速开始
+## ✨ 功能特性
+
+| 特性 | 说明 |
+|------|------|
+| 🌐 **RESTful API** | JSON / Text / HTML / JS 多格式返回 |
+| 🔍 **智能搜索** | 角色名、中日文名言模糊搜索 |
+| 📊 **数据统计** | 查询次数、热门角色、每日趋势 |
+| 🔐 **管理后台** | Web + Electron 桌面应用 |
+| 📦 **跨平台** | Windows / macOS / Linux |
+| ⚡ **轻量快速** | SQLite 数据库，零配置启动 |
+
+## 🚀 快速开始
 
 ### 环境要求
 
@@ -23,27 +32,19 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/yourname/conan-quotes.git
+git clone https://github.com/zy2270561173/conan-quotes.git
 cd conan-quotes
 
-# 安装后端依赖
+# 安装依赖
 npm install
 
-# 启动后端服务
+# 启动服务
 npm start
-
-# 安装前端依赖（可选，如需管理后台）
-cd client
-npm install
 ```
 
-### 访问服务
+服务运行在 http://localhost:3000
 
-- API 文档: http://localhost:3000/api
-- 管理后台: http://localhost:3000/admin
-- 默认管理员: `A8101123` / `A8101123`
-
-## API 文档
+## 📖 API 文档
 
 ### 基础接口
 
@@ -61,8 +62,8 @@ npm install
 | `qu` | 角色名搜索 | `?qu=柯南` |
 | `s` | 名言内容搜索 | `?s=真相` |
 | `n` | 返回数量 | `?n=10` |
-| `la` | 语言: `c`(中文) / `j`(日文) | `?la=j` |
-| `type` | 返回格式: `json`/`text`/`html`/`js` | `?type=html` |
+| `la` | 语言：`c`(中文) / `j`(日文) | `?la=j` |
+| `type` | 返回格式：`json` / `text` / `html` / `js` | `?type=html` |
 
 ### 使用示例
 
@@ -70,22 +71,46 @@ npm install
 # 随机获取一条名言
 curl http://localhost:3000/api/quotes/random
 
-# 获取柯南的名言（JSON）
-curl http://localhost:3000/api/quotes?qu=柯南
+# 获取柯南的名言
+curl "http://localhost:3000/api/quotes?qu=柯南"
 
 # 获取日文名言（Text 格式）
 curl "http://localhost:3000/api/quotes/random?qu=柯南&la=j&type=text"
 
 # 批量获取5条名言
 curl http://localhost:3000/api/quotes/random?n=5
+
+# 获取 HTML 页面展示
+curl "http://localhost:3000/api/quotes/random?type=html"
 ```
 
-## 管理后台
+### 响应示例
 
-### 桌面应用
+```json
+{
+  "id": 1,
+  "quote": "真相只有一个！",
+  "character": "江户川柯南",
+  "japanese": "真実はいつもひとつ！",
+  "characterJP": "江戸川コナン"
+}
+```
+
+## 🖥️ 管理后台
+
+### Web 后台
+
+访问 `/admin` 使用管理员账号登录。
+
+**默认账号：** `A8101123` / `A8101123`
+
+### Electron 桌面应用
 
 ```bash
 cd client
+
+# 安装依赖
+npm install
 
 # 开发模式
 npm run electron:dev
@@ -94,38 +119,35 @@ npm run electron:dev
 npm run electron:dist
 ```
 
-### Web 后台
+### 后台功能
 
-直接访问 `/admin`，使用管理员账号登录。
+- ✅ 名言增删改查
+- ✅ 批量导入（支持格式：`名言|角色|日文|日文角色`）
+- ✅ 角色名自动补全
+- ✅ 数据统计图表
+- ✅ 多管理员管理
 
-#### 功能
-
-- 名言增删改查
-- 批量导入（格式：`名言|角色|日文|日文角色`）
-- 角色名自动补全（柯南→江户川柯南）
-- 数据统计图表
-
-## 项目结构
+## 📁 项目结构
 
 ```
 conan-quotes/
-├── index.js          # Express 服务入口
-├── db.js             # SQLite 数据库操作
-├── quotes.js         # 名言数据初始化
+├── index.js              # Express 服务入口
+├── db.js                 # SQLite 数据库操作
+├── quotes.js             # 名言数据初始化
 ├── package.json
-├── conan_quotes.db   # SQLite 数据库文件
-└── client/           # Electron 管理后台
-    ├── src/           # Vue 源码
-    ├── electron/      # Electron 主进程
-    └── dist/          # 构建输出
+├── public/               # 静态资源
+└── client/               # Electron 管理后台
+    ├── src/              # Vue 3 源码
+    ├── electron/         # Electron 主进程
+    └── dist/             # 构建输出
 ```
 
-## 技术栈
+## 🛠️ 技术栈
 
 **后端**
 - Node.js + Express
 - SQLite3
-- CORS、Session 认证
+- CORS / Session 认证
 
 **前端**
 - Vue 3 + Composition API
@@ -138,7 +160,7 @@ conan-quotes/
 - Electron
 - electron-builder
 
-## 配置说明
+## ⚙️ 配置说明
 
 ### 环境变量
 
@@ -149,19 +171,19 @@ conan-quotes/
 
 ### 修改管理员密码
 
-首次启动会自动创建默认管理员，建议及时修改密码：
-
 ```bash
-# 通过 Web 后台修改
-# 或直接编辑数据库
 sqlite3 conan_quotes.db
-UPDATE admins SET password='your_new_password' WHERE username='A8101123';
+sqlite> UPDATE admins SET password='your_new_password' WHERE username='A8101123';
 ```
 
-## License
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 License
 
 MIT License - 详见 [LICENSE](LICENSE) 文件
 
 ---
 
-*「真相只有一个」* 🍡
+*「推理不存在于真空之中」* 🔍
